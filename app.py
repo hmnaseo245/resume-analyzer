@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-import pdfplumber
+from pypdf import PdfReader
 import docx2txt
 from groq import Groq
 
@@ -11,14 +11,14 @@ st.set_page_config(
     layout="wide"
 )
 
-# Function to extract text from PDF
+# Function to extract text from PDF using pypdf
 def extract_text_from_pdf(uploaded_file):
     text = ""
-    with pdfplumber.open(uploaded_file) as pdf:
-        for page in pdf.pages:
-            extracted = page.extract_text()
-            if extracted:
-                text += extracted + "\n"
+    reader = PdfReader(uploaded_file)
+    for page in reader.pages:
+        extracted = page.extract_text()
+        if extracted:
+            text += extracted + "\n"
     return text
 
 # Function to extract text from DOCX
